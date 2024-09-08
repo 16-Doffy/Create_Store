@@ -1,39 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import classnames from "classname";
+import classnames from "classnames"; // Fixed the classname import
 import './style.scss';
 
 TodoList.propTypes = {
   todoList: PropTypes.array,
-  onTodoClick:PropTypes.func,
+  onTodoClick: PropTypes.func,
 };
 
 TodoList.defaultProps = {
   todoList: [],
-  onTodoClick:null,
+  onTodoClick: null,
 };
 
-function TodoList({ todoList,onTodoClick }) {
+function TodoList({ todoList, onTodoClick }) {
+  const handleTodoClick = (todo, idx) => {
+    if (!onTodoClick) return;
 
+    onTodoClick(todo, idx);
+  };
 
-  const handleTodoClick =( todo,idx) =>{
-    if(!onTodoClick) return; 
-    
-    onTodoClick(todo,idx);
-
-  }
   return (
     <ul className="todo-list">
-      {todoList.map((todo,idx) => (
+      {todoList.map((todo, idx) => (
         <li
-         key={todo.id}
+          key={todo.id}
           className={classnames({
-          'todo-item':true,
-          completed: todo.status ==='completed'
+            "todo-item": true,
+            completed: todo.status === "completed",
           })}
-          onClick={() => handleTodoClick(todo,idx)} //call func todoList
-          > 
-        {todo.title}
+          onClick={() => handleTodoClick(todo, idx)} // Call func todoList
+        >
+          {todo.title}
         </li>
       ))}
     </ul>
