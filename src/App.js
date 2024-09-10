@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Route, Routes, Navigate } from "react-router-dom";
 import TodoFeatures from "./components/features/Todo/pages";
 import AlbumFeatures from "./components/features/Album/pages";
+import productApi from "./api/productApi";
 
 function App() {
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const params= {
+        _limit: 10,
+      };
+      const productList = await productApi.getAll(params);
+      console.log(productList);
+    };
+    fetchProduct();
+  }, []);
   return (
     <div className="App">
       <h1>Home Page</h1>
@@ -19,7 +30,11 @@ function App() {
 
       <Routes>
         <Route path="/home" element={<Navigate to="/" />} exact />
-        <Route path="/post-list/:postId" element={<Navigate to="/post/:postId" />} exact />
+        <Route
+          path="/post-list/:postId"
+          element={<Navigate to="/post/:postId" />}
+          exact
+        />
         <Route path="/" element={<TodoFeatures />} exact />
         {/* Sử dụng /* để TodoFeatures quản lý các đường dẫn con */}
         <Route path="/todos/*" element={<TodoFeatures />} />

@@ -8,12 +8,7 @@ TodoList.propTypes = {
   onTodoClick: PropTypes.func,
 };
 
-TodoList.defaultProps = {
-  todoList: [],
-  onTodoClick: null,
-};
-
-function TodoList({ todoList, onTodoClick }) {
+function TodoList({ todoList = [], onTodoClick = null }) {
   const handleTodoClick = (todo, idx) => {
     if (!onTodoClick) return;
 
