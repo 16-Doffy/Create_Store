@@ -3,6 +3,7 @@ import { Link, Route, Routes, Navigate } from "react-router-dom";
 import TodoFeatures from "./components/features/Todo/pages";
 import AlbumFeatures from "./components/features/Album/pages";
 import productApi from "./api/productApi";
+import CounterFeature from "./components/features/Counter";
 
 function App() {
   useEffect(() => {
@@ -32,8 +33,8 @@ function App() {
           element={<Navigate to="/post/:postId" />}
           exact
         />
-        <Route path="/" element={<TodoFeatures />} exact />
-        {/* Sử dụng /* để TodoFeatures quản lý các đường dẫn con */}
+
+        <Route path="/" element={<CounterFeature />} exact />
         <Route path="/todos/*" element={<TodoFeatures />} />
         <Route path="/album" element={<AlbumFeatures />} />
         <Route path="*" element={<div>404 Not Found</div>} />
