@@ -7,10 +7,7 @@ import productApi from "./api/productApi";
 function App() {
   useEffect(() => {
     const fetchProduct = async () => {
-      const params= {
-        _limit: 10,
-      };
-      const productList = await productApi.getAll(params);
+      const productList = await productApi.getAll();
       console.log(productList);
     };
     fetchProduct();
