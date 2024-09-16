@@ -50,8 +50,8 @@ export default function Header() {
         <Toolbar>
           <QrCode2Icon className={classes.menuButton} />
 
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/" className={classes.link}>
+          <Typography variant="h6" className={classes.title}  style={{ color: 'pink' }} >
+            <Link to="/" className={classes.link} style={{ color: 'inherit' }} >
               Doflamingo
             </Link>
           </Typography>

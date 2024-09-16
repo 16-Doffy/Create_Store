@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import {  Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import TodoFeatures from "./components/features/Todo/pages";
 import AlbumFeatures from "./components/features/Album/pages";
 import productApi from "./api/productApi";
 import CounterFeature from "./components/features/Counter";
-import './App.css';
-
+import "./App.css";
 import Header from "components/Header";
+import Footer from "components/Footer";
 // const Title = styled.h1`
 //   text-align:center;
 //   font-weight:bold;
@@ -27,9 +27,7 @@ function App() {
 
   return (
     <div className="App">
-     <Header/>
-
-   
+      <Header />
 
       <Routes>
         <Route path="/home" element={<Navigate to="/" />} exact />
@@ -44,6 +42,8 @@ function App() {
         <Route path="/album" element={<AlbumFeatures />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
+
+      <Footer />
     </div>
   );
 }
