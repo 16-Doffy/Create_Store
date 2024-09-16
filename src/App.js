@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { Link, Route, Routes, Navigate } from "react-router-dom";
+import {  Route, Routes, Navigate } from "react-router-dom";
 import TodoFeatures from "./components/features/Todo/pages";
 import AlbumFeatures from "./components/features/Album/pages";
 import productApi from "./api/productApi";
 import CounterFeature from "./components/features/Counter";
 import './App.css';
-import styled from "styled-components";
 
-const Title = styled.h1`
-  text-align:center;
-  font-weight:bold;
-  color:${(props) => props.color || 'green'};
-`; //style-components css in js
+import Header from "components/Header";
+// const Title = styled.h1`
+//   text-align:center;
+//   font-weight:bold;
+//   color:${(props) => props.color || 'green'};
+// `; //style-components css in js
 
 function App() {
   useEffect(() => {
@@ -27,16 +27,9 @@ function App() {
 
   return (
     <div className="App">
-     <Title >  HEADING </Title>
+     <Header/>
 
-      <nav>
-        <p>
-          <Link to="/todos">Todos</Link>
-        </p>
-        <p>
-          <Link to="/album">Album</Link>
-        </p>
-      </nav>
+   
 
       <Routes>
         <Route path="/home" element={<Navigate to="/" />} exact />
