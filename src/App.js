@@ -4,6 +4,14 @@ import TodoFeatures from "./components/features/Todo/pages";
 import AlbumFeatures from "./components/features/Album/pages";
 import productApi from "./api/productApi";
 import CounterFeature from "./components/features/Counter";
+import './App.css';
+import styled from "styled-components";
+
+const Title = styled.h1`
+  text-align:center;
+  font-weight:bold;
+  color:${(props) => props.color || 'green'};
+`; //style-components css in js
 
 function App() {
   useEffect(() => {
@@ -13,9 +21,13 @@ function App() {
     };
     fetchProduct();
   }, []);
+
+  // const color = 'yellow';
+  // const backgroundUrl = 'https://i.pinimg.com/originals/a7/6f/b5/a76fb56a44eb84ac877bde3ae1326086.jpg';
+
   return (
     <div className="App">
-      <h1>Home Page</h1>
+     <Title >  HEADING </Title>
 
       <nav>
         <p>
