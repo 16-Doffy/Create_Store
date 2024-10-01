@@ -10,14 +10,19 @@ RegisterForm.propTypes = {
   onsubmit: PropTypes.func,
 };
 const schema = yup.object().shape({
-  fullName: yup.string().required("Full Name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup.string().required("Password is required"),
+  fullName: yup.string()
+    .required("Full Name is required")
+    .test('two-words', 'Please enter at least two words', (value) => {
+      return value && value.trim().split(' ').length >= 2;
+    }),
+  email: yup.string().email("Please input a valid email").required("Email is required"),
+  password: yup.string().required("Password is required").min(6, 'Please enter at least 6 characters'),
   retypePassword: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Retype Password is required"),
 });
+
 
 function RegisterForm({ onSubmit }) {
   const { control, handleSubmit, reset } = useForm({
