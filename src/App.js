@@ -7,6 +7,8 @@ import CounterFeature from "./components/features/Counter";
 import "./App.css";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import { Button } from "@mui/material";
+import { useSnackbar } from "notistack";
 // const Title = styled.h1`
 //   text-align:center;
 //   font-weight:bold;
@@ -14,6 +16,8 @@ import Footer from "components/Footer";
 // `; //style-components css in js
 
 function App() {
+  const { enqueueSnackbar } = useSnackbar(); // Đảm bảo tên hàm đúng
+
   useEffect(() => {
     const fetchProduct = async () => {
       const productList = await productApi.getAll();
@@ -24,11 +28,16 @@ function App() {
 
   // const color = 'yellow';
   // const backgroundUrl = 'https://i.pinimg.com/originals/a7/6f/b5/a76fb56a44eb84ac877bde3ae1326086.jpg';
+const showNotice = () =>{
+  enqueueSnackbar('successfully',{variant:'success'})
+}
 
   return (
     <div className="App">
       <Header />
 
+    <Button onClick={showNotice}> Show notice</Button>
+    
       <Routes>
         <Route path="/home" element={<Navigate to="/" />} exact />
         <Route

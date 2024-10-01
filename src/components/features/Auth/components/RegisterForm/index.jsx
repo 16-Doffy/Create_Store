@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TextField, Avatar, Typography, Button, InputAdornment, IconButton } from "@mui/material";
+import { TextField, Avatar, Typography, Button, InputAdornment, IconButton, LinearProgress } from "@mui/material";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 
 const schema = yup.object().shape({
   fullName: yup.string()
@@ -22,7 +23,7 @@ const schema = yup.object().shape({
 });
 
 function RegisterForm({ onSubmit }) {
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       fullName: '',
@@ -31,6 +32,8 @@ function RegisterForm({ onSubmit }) {
       retypePassword: ''
     }
   });
+  const { enqueueSnackbar } = useSnackbar(); // Đảm bảo tên hàm đúng
+  const { isSubmitting } = formState; // Lấy isSubmitting từ formState
 
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => setShowPassword(prev => !prev);
@@ -38,15 +41,19 @@ function RegisterForm({ onSubmit }) {
   const [showRPW, setRpw] = useState(false);
   const toggleRPW = () => setRpw(prev => !prev);
 
-  const handleFormSubmit = (data) => {
+  const handleFormSubmit = async (data) => {
     if (onSubmit) {
-      onSubmit(data);
+      await onSubmit(data);
     }
     reset();
   };
-
+  const showNotice = () =>{
+    enqueueSnackbar('Register successfully',{variant:'success'})
+  }
+  
   return (
     <div sx={{ padding: 4 }}>
+      { isSubmitting && <LinearProgress />  }
       <Avatar sx={{ margin: "0 auto", color: "white", backgroundColor: "rgb(0, 123, 255)" }}>
         <HowToRegIcon />
       </Avatar>
@@ -134,7 +141,7 @@ function RegisterForm({ onSubmit }) {
             />
           )}
         />
-        <Button
+        <Button onClick={showNotice}
           sx={{
             marginTop: 4,
             textAlign: "center",
@@ -142,6 +149,7 @@ function RegisterForm({ onSubmit }) {
             margin: "0 auto",
             display: "flex",
           }}
+          disabled={isSubmitting}
           type="submit"
           variant="contained"
           color="primary"

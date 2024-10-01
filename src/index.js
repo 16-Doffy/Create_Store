@@ -6,6 +6,8 @@ import store from "./app/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { Snackbar } from "@mui/material";
+import { SnackbarProvider } from "notistack";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -13,7 +15,10 @@ root.render(
   <React.StrictMode>
     <Provider store={store}> 
     <BrowserRouter>
-      <App />
+    <SnackbarProvider anchorOrigin={{vertical:'top' , horizontal:'right'}}>
+    <App />
+    </SnackbarProvider>
+   
     </BrowserRouter>
     </Provider>
   </React.StrictMode>
