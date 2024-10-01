@@ -6,9 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TextField, Avatar, Typography, Button, InputAdornment, IconButton } from "@mui/material";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-RegisterForm.propTypes = {
-  onsubmit: PropTypes.func,
-};
+
 const schema = yup.object().shape({
   fullName: yup.string()
     .required("Full Name is required")
@@ -23,24 +21,22 @@ const schema = yup.object().shape({
     .required("Retype Password is required"),
 });
 
-
 function RegisterForm({ onSubmit }) {
   const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      password: '',
+      retypePassword: ''
+    }
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => setShowPassword(prev => !prev);
 
-
-const [showPassword,setShowpassword] = useState(false);
-const toggleShowpassword =() =>{
-  setShowpassword((prev) => !prev);
-};
-
-const [showRPW,setRpw] = useState(false);
-const toggleRPW =() =>{
-  setRpw((prev) => !prev);
-};
-
+  const [showRPW, setRpw] = useState(false);
+  const toggleRPW = () => setRpw(prev => !prev);
 
   const handleFormSubmit = (data) => {
     if (onSubmit) {
@@ -51,20 +47,10 @@ const toggleRPW =() =>{
 
   return (
     <div sx={{ padding: 4 }}>
-      <Avatar
-        sx={{
-          margin: "0 auto",
-          color: "white",
-          backgroundColor: "rgb(0, 123, 255)",
-        }}
-      >
+      <Avatar sx={{ margin: "0 auto", color: "white", backgroundColor: "rgb(0, 123, 255)" }}>
         <HowToRegIcon />
       </Avatar>
-      <Typography
-        sx={{ margin: "16px 0 24px 0", textAlign: "center" }}
-        variant="h5"
-      >
-       
+      <Typography sx={{ margin: "16px 0 24px 0", textAlign: "center" }} variant="h5">
         Create an account
       </Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -104,7 +90,7 @@ const toggleRPW =() =>{
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              type={showPassword ? "text" : "password"}  // Kiểm soát type dựa vào trạng thái showPassword
+              type={showPassword ? "text" : "password"}
               label="Password"
               variant="outlined"
               error={!!fieldState.error}
@@ -114,7 +100,7 @@ const toggleRPW =() =>{
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={toggleShowpassword}>
+                    <IconButton onClick={toggleShowPassword}>
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -123,14 +109,13 @@ const toggleRPW =() =>{
             />
           )}
         />
-       
         <Controller
           name="retypePassword"
           control={control}
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              type={showRPW ? "text" : "password"} 
+              type={showRPW ? "text" : "password"}
               label="Retype Password"
               variant="outlined"
               error={!!fieldState.error}
@@ -141,7 +126,7 @@ const toggleRPW =() =>{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={toggleRPW}>
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                      {showRPW ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -153,8 +138,8 @@ const toggleRPW =() =>{
           sx={{
             marginTop: 4,
             textAlign: "center",
-            width: "50%", // Thay đổi width trong sx bằng cách viết chuẩn
-            margin: "0 auto", // Để canh giữa nút
+            width: "50%",
+            margin: "0 auto",
             display: "flex",
           }}
           type="submit"
