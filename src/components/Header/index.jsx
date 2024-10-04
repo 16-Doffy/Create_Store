@@ -85,7 +85,7 @@ export default function Header() {
         }}
       >
         <DialogContent>
-          <Register />
+          <Register closeDialog={handleClose}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

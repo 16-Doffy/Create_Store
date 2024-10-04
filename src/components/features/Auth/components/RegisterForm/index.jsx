@@ -23,7 +23,7 @@ const schema = yup.object().shape({
 });
 
 function RegisterForm({ onSubmit }) {
-  const { control, handleSubmit, reset, formState } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       fullName: '',
@@ -45,7 +45,7 @@ function RegisterForm({ onSubmit }) {
     if (onSubmit) {
       await onSubmit(data);
     }
-    reset();
+   
   };
   const showNotice = () =>{
     enqueueSnackbar('Register successfully',{variant:'success'})

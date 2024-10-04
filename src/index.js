@@ -6,7 +6,6 @@ import store from "./app/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { Snackbar } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 
 
