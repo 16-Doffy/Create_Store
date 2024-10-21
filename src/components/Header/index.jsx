@@ -12,6 +12,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
 import Register from "components/features/Auth/components/Register";
+import Login from "components/features/Auth/components/Login";
 
 const useStyles = makeStyles({
   root: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles({
   },
   link: {
     color: "white",
-    textDecoration: "none", 
+    textDecoration: "none",
   },
   navLinks: {
     marginLeft: "auto",
@@ -34,8 +35,10 @@ const useStyles = makeStyles({
 
 export default function Header() {
   const [open, setOpen] = React.useState(false);
+  const [isRegister, setIsRegister] = React.useState(true); 
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (isRegisterForm) => {
+    setIsRegister(isRegisterForm);
     setOpen(true);
   };
 
@@ -50,8 +53,12 @@ export default function Header() {
         <Toolbar>
           <QrCode2Icon className={classes.menuButton} />
 
-          <Typography variant="h6" className={classes.title}  style={{ color: 'pink' }} >
-            <Link to="/" className={classes.link} style={{ color: 'inherit' }} >
+          <Typography
+            variant="h6"
+            className={classes.title}
+            style={{ color: "pink" }}
+          >
+            <Link to="/" className={classes.link} style={{ color: "inherit" }}>
               Doflamingo
             </Link>
           </Typography>
@@ -64,8 +71,11 @@ export default function Header() {
             <NavLink to="/album" className={classes.link}>
               <Button color="inherit">Album</Button>
             </NavLink>
-            <Button color="inherit" onClick={handleClickOpen}>
-              Resgister
+            <Button color="inherit" onClick={() => handleClickOpen(true)}>
+              Register
+            </Button>
+            <Button color="inherit" onClick={() => handleClickOpen(false)}>
+              Login
             </Button>
           </Box>
         </Toolbar>
@@ -85,7 +95,11 @@ export default function Header() {
         }}
       >
         <DialogContent>
-          <Register closeDialog={handleClose}/>
+          {isRegister ? (
+            <Register closeDialog={handleClose} />
+          ) : (
+            <Login closeDialog={handleClose} />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
