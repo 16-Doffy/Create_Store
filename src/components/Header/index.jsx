@@ -10,9 +10,11 @@ import { makeStyles } from "@mui/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-
 import Register from "components/features/Auth/components/Register";
 import Login from "components/features/Auth/components/Login";
+import { useSelector } from "react-redux";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   root: {
@@ -33,17 +35,29 @@ const useStyles = makeStyles({
   },
 });
 
+const MODE = {
+  LOGIN: "login",
+  REGISTER: "register",
+};
 export default function Header() {
-  const [open, setOpen] = React.useState(false);
-  const [isRegister, setIsRegister] = React.useState(true); 
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser?.id; // Use optional chaining
 
-  const handleClickOpen = (isRegisterForm) => {
-    setIsRegister(isRegisterForm);
+  const [open, setOpen] = React.useState(false);
+  const [mode, setMode] = React.useState(MODE.LOGIN);
+const [anchorEl,setAnchorEl] = React.useState(null);
+  const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+  const handleUserClick = (e) => {
+      setAnchorEl(e.currentTarget);
   };
   const classes = useStyles();
 
@@ -71,16 +85,31 @@ export default function Header() {
             <NavLink to="/album" className={classes.link}>
               <Button color="inherit">Album</Button>
             </NavLink>
-            <Button color="inherit" onClick={() => handleClickOpen(true)}>
-              Register
-            </Button>
-            <Button color="inherit" onClick={() => handleClickOpen(false)}>
-              Login
-            </Button>
+            {isLoggedIn && (
+              <Button color="inherit" onClick={() => handleClickOpen(false)}>
+                Login
+              </Button>
+            )}
+
+            {!isLoggedIn && (
+              <IconButton color="inherit" onClick={handleUserClick}>
+                <AccountCircle />
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
-
+      <Menu 
+      keepMounted
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleCloseMenu}
+     
+      >
+            <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
+            <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+            <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
+          </Menu>
       <Dialog
         open={open}
         onClose={(event, reason) => {
@@ -95,10 +124,26 @@ export default function Header() {
         }}
       >
         <DialogContent>
-          {isRegister ? (
-            <Register closeDialog={handleClose} />
-          ) : (
-            <Login closeDialog={handleClose} />
+          {mode === MODE.REGISTER && (
+            <>
+              <Register closeDialog={handleClose} />
+              <Box textAlign="center">
+                <Button color="primary" onClick={() => setMode(MODE.LOGIN)}>
+                  Already have an account.Login here
+                </Button>
+              </Box>
+            </>
+          )}
+
+          {mode === MODE.LOGIN && (
+            <>
+              <Login closeDialog={handleClose} />
+              <Box textAlign="center">
+                <Button color="primary" onClick={() => setMode(MODE.REGISTER)}>
+                  Dont have account, register here
+                </Button>
+              </Box>
+            </>
           )}
         </DialogContent>
         <DialogActions>
