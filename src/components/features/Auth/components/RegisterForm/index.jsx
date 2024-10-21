@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { TextField, Button, Box, Typography, Avatar } from '@mui/material';
-import * as yup from 'yup';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
-
-
-
-
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { TextField, Button, Box, Typography, Avatar, Snackbar } from "@mui/material";
+import * as yup from "yup";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
-  fullName: yup
+  name: yup
     .string()
     .required("Full Name is required")
     .test("two-words", "Please enter at least two words", (value) => {
@@ -30,30 +28,31 @@ const schema = yup.object().shape({
 });
 
 function RegisterForm({ onSubmit }) {
-  const [values, setValues] = useState({
-    name: '',
-    email: '',
-    password: '',
-    retypePassword: '',
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+  const handleFormSubmit = (data) => {
+    // Call the onSubmit prop with the form data
+    onSubmit(data);
+    setMessage("Registration successful!"); // Set success message
+    setOpen(true); // Open Snackbar
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(values);
+  const handleCloseSnackbar = () => {
+    setOpen(false); // Close Snackbar
   };
 
   return (
-    
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
-            <Avatar
+    <Box component="form" onSubmit={handleSubmit(handleFormSubmit)} noValidate sx={{ mt: 2 }}>
+      <Avatar
         style={{
           margin: "0 auto",
           color: "white",
@@ -75,8 +74,9 @@ function RegisterForm({ onSubmit }) {
         margin="normal"
         label="Họ và tên"
         name="name"
-        value={values.name}
-        onChange={handleChange}
+        {...register("name")}
+        error={!!errors.name}
+        helperText={errors.name ? errors.name.message : ""}
         placeholder="Nhập họ và tên"
       />
 
@@ -87,8 +87,9 @@ function RegisterForm({ onSubmit }) {
         label="Email"
         type="email"
         name="email"
-        value={values.email}
-        onChange={handleChange}
+        {...register("email")}
+        error={!!errors.email}
+        helperText={errors.email ? errors.email.message : ""}
         placeholder="Nhập email"
       />
 
@@ -99,38 +100,46 @@ function RegisterForm({ onSubmit }) {
         label="Mật khẩu"
         type="password"
         name="password"
-        value={values.password}
-        onChange={handleChange}
+        {...register("password")}
+        error={!!errors.password}
+        helperText={errors.password ? errors.password.message : ""}
         placeholder="Nhập mật khẩu"
       />
 
-      <TextField
-        required
-        fullWidth
-        margin="normal"
-        label="Nhập lại mật khẩu"
-        type="password"
-        name="retypePassword"
-        value={values.retypePassword}
-        onChange={handleChange}
-        placeholder="Nhập lại mật khẩu"
-      />
+<TextField
+  required
+  fullWidth
+  margin="normal"
+  label="Nhập lại mật khẩu"
+  type="password"  // Đổi từ "retypePassword" sang "password"
+  {...register("retypePassword")}
+  error={!!errors.retypePassword}
+  helperText={errors.retypePassword ? errors.retypePassword.message : ""}
+  placeholder="Nhập lại mật khẩu"
+/>
 
-<Button
-          style={{
-            marginTop: 16,
-            textAlign: "center",
-            width: "50%",
-            margin: "0 auto",
-            display: "flex",
-          }}
-          
-          type="submit"
-          variant="contained"
-          color="primary"
-        >
-          Register
-        </Button>
+
+      <Button
+        style={{
+          marginTop: 16,
+          textAlign: "center",
+          width: "50%",
+          margin: "0 auto",
+          display: "flex",
+        }}
+        type="submit"
+        variant="contained"
+        color="primary"
+      >
+        Register
+      </Button>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={message}
+      />
     </Box>
   );
 }

@@ -21,6 +21,7 @@ function Register(props) {
         name: values.name,
         email: values.email,
         password: values.password,
+        retypePassword:values.retypePassword
       };
 
       // Call the register API

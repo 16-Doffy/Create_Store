@@ -5,7 +5,10 @@ function Footer(props) {
     return (
         <footer className="footer">
             <p>Author: Dr. Corn<br />
-            <a  style={{ color: 'white' }} href="fbto:https://www.facebook.com/binkamikaze">https://www.facebook.com/binkamikaze</a></p>
+            <a style={{ color: 'white' }} href="https://www.facebook.com/binkamikaze" target="_blank" rel="noopener noreferrer">
+                FB:Bin Sirô
+            </a>
+            </p>
         </footer>
     );
 }
