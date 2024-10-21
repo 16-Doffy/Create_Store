@@ -5,6 +5,7 @@ import { register } from "../userSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import userApi from "api/userApi";
 
 Register.propTypes = {
   closeDialog: PropTypes.func,
@@ -16,22 +17,39 @@ function Register(props) {
 
   const handleSubmit = async (values) => {
     try {
-      values.username = values.email;
+      const registrationData = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      };
 
-      const action = register(values);
+      // Call the register API
+      const user = await userApi.register(registrationData);
+      console.log("Registration successful:", user); // Log the user data
+
+      // Dispatch the registration action
+      const action = register(user); // Use the returned user data
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
 
-      // Close dialog
-      const { closeDialog } = props;
-      if (closeDialog) {
-        closeDialog();
+      // Close the dialog if provided
+      if (props.closeDialog) {
+        props.closeDialog();
       }
 
-      enqueueSnackbar("Register successfully!!!", { variant: "success" });
+      enqueueSnackbar("Đăng ký thành công!", { variant: "success" });
     } catch (error) {
-      console.error("Failed to register:", error);
-      enqueueSnackbar(error.message || "Failed to register", { variant: "error" });
+      console.error("Đăng ký thất bại:", error);
+
+      // Handle error (similar to your previous implementation)
+      if (error.response) {
+        enqueueSnackbar(
+          error.response.data?.message || "Đăng ký thất bại",
+          { variant: "error" }
+        );
+      } else {
+        enqueueSnackbar("Lỗi kết nối hoặc yêu cầu không hợp lệ.", { variant: "error" });
+      }
     }
   };
 

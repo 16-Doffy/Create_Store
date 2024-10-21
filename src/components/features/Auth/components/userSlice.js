@@ -2,12 +2,13 @@ import userApi from "api/userApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const register = createAsyncThunk("users/register", async (payload) => {
-  const data = await userApi.register(payload);
-  // Call API to register
-  // Save data to local storage
+  const data = await userApi.register({
+    name: payload.name,
+    email: payload.email,
+    password: payload.password,
+  });
   localStorage.setItem("access_token", data.jwt);
   localStorage.setItem("user", JSON.stringify(data.user));
-  // RETURN user data
   return data.user;
 });
 
