@@ -35,9 +35,10 @@ function Login(props) {
         props.closeDialog();
       }
   
-      enqueueSnackbar("Login successful", { variant: "success" });
+      enqueueSnackbar("Login successful", { variant: "success", autoHideDuration: 2000 });
+
     } catch (error) {
-      console.error("Login Fail", error); // In chi tiết lỗi
+      console.error("Login Fail", error);
   
       if (error.response) {
         enqueueSnackbar(

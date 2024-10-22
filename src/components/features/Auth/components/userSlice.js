@@ -30,7 +30,16 @@ const userSlice = createSlice({
     settings: {},
     
   },
-  reducers: {},
+  reducers: {
+    logout(state) {
+      // Xóa localStorage
+      localStorage.removeItem(StorageKeys.USER);
+      localStorage.removeItem(StorageKeys.TOKEN);
+      state.current = {}; // Đặt lại trạng thái current
+      state.loading = false; // Đảm bảo không còn trạng thái loading
+      state.error = null; // Xóa thông báo lỗi
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
@@ -51,7 +60,7 @@ const userSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.current = action.payload;
+        state.current = action.payload; // Đảm bảo action.payload chứa dữ liệu người dùng
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -60,5 +69,6 @@ const userSlice = createSlice({
   },
 });
 
-const { reducer } = userSlice;
+const {actions, reducer } = userSlice;
+export const {logout} = actions;
 export default reducer;

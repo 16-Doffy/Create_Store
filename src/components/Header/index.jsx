@@ -12,9 +12,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Register from "components/features/Auth/components/Register";
 import Login from "components/features/Auth/components/Login";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
+import { logout } from "components/features/Auth/components/userSlice";
 
 const useStyles = makeStyles({
   root: {
@@ -40,12 +41,12 @@ const MODE = {
   REGISTER: "register",
 };
 export default function Header() {
+  const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser?.id; // Use optional chaining
-
+  const isLoggedIn = !!loggedInUser.id; // Use optional chaining
   const [open, setOpen] = React.useState(false);
   const [mode, setMode] = React.useState(MODE.LOGIN);
-const [anchorEl,setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -57,7 +58,11 @@ const [anchorEl,setAnchorEl] = React.useState(null);
     setAnchorEl(null);
   };
   const handleUserClick = (e) => {
-      setAnchorEl(e.currentTarget);
+    setAnchorEl(e.currentTarget);
+  };
+  const handleLogoutClick = () => {
+
+    dispatch(logout());
   };
   const classes = useStyles();
 
@@ -85,6 +90,11 @@ const [anchorEl,setAnchorEl] = React.useState(null);
             <NavLink to="/album" className={classes.link}>
               <Button color="inherit">Album</Button>
             </NavLink>
+
+            <NavLink to="/products" className={classes.link}>
+              <Button color="inherit">Product</Button>
+            </NavLink>
+
             {isLoggedIn && (
               <Button color="inherit" onClick={() => handleClickOpen(false)}>
                 Login
@@ -99,17 +109,16 @@ const [anchorEl,setAnchorEl] = React.useState(null);
           </Box>
         </Toolbar>
       </AppBar>
-      <Menu 
-      keepMounted
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleCloseMenu}
-     
+      <Menu
+        keepMounted
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
       >
-            <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
-            <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
-            <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
-          </Menu>
+        <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
+        <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
       <Dialog
         open={open}
         onClose={(event, reason) => {
@@ -151,5 +160,6 @@ const [anchorEl,setAnchorEl] = React.useState(null);
         </DialogActions>
       </Dialog>
     </Box>
+    
   );
 }
